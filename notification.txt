@@ -1,0 +1,47 @@
+# from firebase_admin import credentials, initialize_app, messaging
+
+# Replace this with the path to your Firebase service account key JSON file
+# service_account_key_path = "E:\Python Mini Project\quizapp-e74fe-firebase-adminsdk-1zrwi-d1fc2fca94.json"
+# cred = credentials.Certificate(service_account_key_path)
+# initialize_app(cred)
+
+# @app.route('/share_on_instagram', methods=["GET","POST"])
+# def share_on_instagram():
+#     if request.headers.get('Content-Type') != 'application/json':
+#         return jsonify({"status": "error", "message": "Unsupported Media Type. Please send JSON data with Content-Type: application/json"}), 415
+#     print("Headers:", request.headers)
+#     print("Body:", request.get_data())
+#     data = request.get_json()
+#     token = data.get('token')
+
+#     if not token:
+#         return jsonify({"status": "error", "message": "Missing token"}), 400
+#     else:
+#         print(token)
+
+#     # Initialize the Firebase Messaging client
+#     message = messaging.Message(
+#         token=token,
+#         notification=messaging.Notification(
+#             title="New Message",
+#             body="You have a new message on Instagram!"
+#         ),
+#         webpush=messaging.WebpushConfig(
+#             notification=messaging.WebpushNotification(
+#                 icon="https://example.com/icon.png"
+#             )
+#         )
+#     )
+
+#     try:
+#         response = messaging.send(message)
+#         print(response)
+#         return jsonify({"status": "success"}), 200
+#     except Exception as e:
+#         print("Failed to send notification:", str(e))
+#         return jsonify({"status": "error", "message": "Failed to send notification"}), 500
+# from flask import send_from_directory
+
+# @app.route('/firebase-messaging-sw.js')
+# def firebase_messaging_sw():
+#     return send_from_directory('static/js', 'firebase-messaging-sw.js')

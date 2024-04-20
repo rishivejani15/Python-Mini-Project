@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify/Game Start</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+</head>
+
+<body>
+
+    <div id="large-header" class="large-header">
+        <canvas id="demo-canvas"></canvas>
+    <form action="/register" method="post">
+        <h2>Enter Details</h2>
+        <input type="text" name="userName" placeholder="Your Name" required>
+        <br> <!-- Add a line break for better spacing -->
+        <input type="text" name="sc" placeholder="Game Code" required>
+        <br> <!-- Add a line break for better spacing -->
+        <input type="submit" value="Submit">
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </div>
+
+</body>
+
+</html>

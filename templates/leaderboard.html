@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify/Leaderboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <style>
+   /* Default styles */
+body {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    position: relative;
+}
+
+thead {
+    background-color: #ffd700;
+    font-size: 2rem;
+}
+
+thead th {
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #333;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    font-size: 1.5rem;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+    color:  white;
+}
+
+
+tfoot {
+    font-weight: bold;
+}
+
+/* Responsive styles */
+@media only screen and (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+    th, td {
+        padding: 8px;
+        font-size: 1.2rem;
+    }
+    img.crown-img {
+        top: 245px;
+    left: 270px; 
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div id="large-header" class="large-header">
+        <canvas id="demo-canvas"></canvas>
+    <h1>Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+       
+        <tbody id="leaderboard-body">
+            {% for user, data in users %}
+                {% if user != session.get('username') %}
+                    <tr>
+                        <td>{{ user }}</td>
+                        <td>{{ data['score'] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <form method="post">
+        <h2>Enter your mail to get all the correct answers:</h2>
+        <input type="text" name="mail" placeholder="Your Mail" required>
+        <input type="submit" value="Submit">
+        <br>
+        
+    </form>
+    <button onclick="playagain();">Play again</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function playagain() {
+    // Send a request to the server to clear all users and restart the game
+    fetch('/restart-game', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirect to the home page (or wherever you want)
+            window.location.href = '/';
+        } else {
+            console.error('Failed to restart the game');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+  </script>
+</body>
+</html>

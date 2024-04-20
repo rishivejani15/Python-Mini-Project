@@ -1,0 +1,30 @@
+Question: What does the computer software acronym JVM stand for?
+Correct Answer: Java Virtual Machine
+
+Question: HTML is what type of language?
+Correct Answer: Markup Language
+
+Question: How many values can a single byte represent?
+Correct Answer: 256
+
+Question: The C programming language was created by this American computer scientist. 
+Correct Answer: Dennis Ritchie
+
+Question: The programming language 'Swift' was created to replace what other programming language?
+Correct Answer: Objective-C
+
+Question: What does the computer software acronym JVM stand for?
+Correct Answer: Java Virtual Machine
+
+Question: HTML is what type of language?
+Correct Answer: Markup Language
+
+Question: How many values can a single byte represent?
+Correct Answer: 256
+
+Question: The C programming language was created by this American computer scientist. 
+Correct Answer: Dennis Ritchie
+
+Question: The programming language 'Swift' was created to replace what other programming language?
+Correct Answer: Objective-C
+

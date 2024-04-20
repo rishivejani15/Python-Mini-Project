@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify/Quiz Questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <style>
+        h1,h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .questions {
+            position: relative;
+            padding-bottom: 50px;
+            background-color: transparent;
+            color:#ffd700;
+            
+        }
+
+        .question {
+            display: none;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* background-color:transparent; */
+            font-size: 1.75rem;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question p {
+            margin: 0;
+        }
+
+        .question .answer-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+        .question .answer-group label {
+            display: block;
+            padding: 5px;
+            background-color: #ffd700;
+            color: black;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        } 
+
+        .question .answer-group label:hover {
+            background-color: #ffd700; 
+        }
+
+        .question .answer-group input[type="radio"] {
+            display: none;
+        }
+
+        .question .answer-group input[type="radio"]:checked + label {
+            background-color: green;
+            color: #ccc;
+        }
+
+
+        /* Styling for the progress bar */
+        .progress-bar {
+            position: absolute;
+            top: 0; /* Align at the top of the page */
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #ccc;
+            z-index: 999; /* Ensure it's on top of other content */
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #ffd700;
+            width: 100%; /* Initially fill the progress bar */
+            border-radius: 4px;
+            transition: width 1s linear; /* Smooth transition for width changes */
+        }
+    </style>
+</head>
+<body>
+    <div id="large-header" class="large-header">
+        <canvas id="demo-canvas"></canvas>
+        <h1>Quiz Questions</h1>
+        <!-- Progress bar -->
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+        <div class="questions">
+            {% if questions %}
+            {% for question in questions %}
+            <div class="question">
+                <p><strong>Question:</strong> {{ question.question }}</p>
+                <br>
+                <div class="answer-group">
+                    {% for answer in question.shuffled_answers %}
+                    <input type="radio" id="{{ answer }}" name="answer" value="{{ answer }}">
+                    <label for="{{ answer }}">{{ answer }}</label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <div id="score"><h3>Score: {{ score }}</h3></div>
+            <input type="submit" value="Submit" id="btn">
+            {% else %}
+            <p>No questions available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        const questions = document.querySelectorAll('.question');
+let currentQuestionIndex = 0;
+let score = 0;
+let timeout; // Declare timeout in the global scope
+let timer = 30; // Set initial timer value
+
+// Function to update the progress bar
+const updateProgressBar = () => {
+    const progress = (30 - timer) / 30 * 100; // Calculate progress percentage
+    document.getElementById('progress-bar-fill').style.width = `${progress}%`; // Set width of progress bar fill
+};
+
+// Function to start the timer
+const startTimer = () => {
+    timeout = setInterval(() => {
+        timer--;
+        updateProgressBar();
+        if (timer === 0) {
+            timer = 30; // Reset timer to 30 seconds
+            updateProgressBar();
+            showNextQuestion(); // Move to the next question when timer expires
+        }
+    }, 1000);
+};
+
+// Function to stop the timer
+const stopTimer = () => {
+    clearInterval(timeout);
+};
+
+// Get the question data from the Flask server
+fetch('/data_question')
+    .then(response => response.json())
+    .then(data => {
+        question_data = data;
+        startTimer(); // Start the timer when data is fetched
+    })
+    .catch(error => console.error(error));
+
+const showNextQuestion = () => {
+    questions[currentQuestionIndex].classList.remove('active');
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        questions[currentQuestionIndex].classList.add('active');
+        resetTimeout();
+        startTimer(); // Start the timer for the next question
+    } else {
+        // All questions answered, display final score and terminate
+        document.getElementById('score').innerHTML = 'Final Score: ' + score;
+        document.getElementById('btn').style.display = 'none'; // Hide the submit button
+        stopTimer(); // Stop the timer
+        setTimeout(() => {
+            // Redirect to leaderboard after 1.5 seconds
+            window.location.href = '/leaderboard';
+        }, 1500);
+        const finalScore = score; // Get the final score
+        submitFinalScore(finalScore); // Submit the final score to the server
+    }
+};
+
+const submitFinalScore = (finalScore) => {
+    fetch('/byebye', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ final_score: finalScore })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Handle success
+            console.log('Final score sent successfully');
+        } else {
+            // Handle error
+            console.error('Failed to send final score');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+};
+
+const resetTimeout = () => {
+    clearInterval(timeout); // Stop the current timer
+    timer = 30; // Reset timer to 30 seconds
+    updateProgressBar(); // Reset progress bar
+};
+
+const btn = document.getElementById('btn');
+const scoreElement = document.getElementById('score');
+
+btn.addEventListener('click', () => {
+    stopTimer(); // Stop the timer when the submit button is clicked
+    const selectedAnswer = document.querySelector('.question.active input[type="radio"]:checked');
+    if (selectedAnswer) {
+        const answer = selectedAnswer.value;
+        const questionIndex = currentQuestionIndex;
+
+        // Check if the selected answer is correct
+        const isCorrect = checkAnswer(questionIndex, answer, question_data);
+
+        // Update score if the answer is correct
+        if (isCorrect) {
+            score++;
+            scoreElement.textContent = 'Score: ' + score;
+        }
+
+        showNextQuestion();
+    } else {
+        // If no answer is selected, move to the next question immediately
+        showNextQuestion();
+    }
+});
+
+const checkAnswer = (questionIndex, selectedAnswer, question_data) => {
+    const correctAnswer = decodeURIComponent(question_data[questionIndex].correct_answer);
+    return selectedAnswer === correctAnswer;
+};
+
+    </script>
+    <script>
+        questions[currentQuestionIndex].classList.add('active');
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+le thai gyu

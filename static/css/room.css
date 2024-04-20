@@ -1,0 +1,120 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    position: relative;
+    margin: 0; /* Add this line */
+    padding: 0; /* Add this line */
+}
+
+/* Header */
+.large-header {
+    position: relative;
+    background-color: #333;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    z-index: 1;
+}
+
+#demo-canvas {
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a, #333333);
+    animation: moveBackground 5s linear infinite;
+}
+
+h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    position: relative;
+    z-index: 2;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    margin-top: 150px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    background-color: #ffd700;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+button:hover{
+    background-color: #ffa500;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: -1;
+}
+
+button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+button:hover {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+    background: linear-gradient(45deg, #ffa500, #ffd700);
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+}
+
+@keyframes shake {
+    0% {transform: translate(1px, 1px) rotate(0deg);}
+    10% {transform: translate(-1px, -2px) rotate(-1deg);}
+    20% {transform: translate(-3px, 0px) rotate(1deg);}
+    30% {transform: translate(3px, 2px) rotate(0deg);}
+    40% {transform: translate(1px, -1px) rotate(1deg);}
+    50% {transform: translate(-1px, 2px) rotate(-1deg);}
+    60% {transform: translate(-3px, 1px) rotate(0deg);}
+    70% {transform: translate(3px, 1px) rotate(-1deg);}
+    80% {transform: translate(1px, -1px) rotate(1deg);}
+    90% {transform: translate(1px, 2px) rotate(0deg);}
+    100% {transform: translate(1px, -2px) rotate(-1deg);}
+}
+
+h1{
+    color: #ffd700;
+    font-size: 6rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+@media screen and (max-width: 600px) {
+    .large-header h2 {
+        font-size: 1.5rem;
+    }
+    .large-header h1{
+        font-size: 5rem;
+    }
+    input[type="text"],
+    input[type="submit"],
+    button {
+        
+        margin: 10px 0;
+    }
+}
+
+/* Room */

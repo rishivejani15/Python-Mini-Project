@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizify/Quiz Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+</head>
+<body>
+    <div id="large-header" class="large-header">
+    <canvas id="demo-canvas"></canvas>
+    <h1>Quiz Generator</h1>
+    <form action="/generate_quiz" method="post">
+        <h2 style="font-size:1.5rem;display:inline-block;margin-right: 10px;">Amount of Questions:</h2>
+        <input type="number" id="amount" name="amount" min="1" max="50" placeholder="Enter number of questions"  style="display:inline-flex;align-items: center;width:260px;height: 17px;"><br><br>
+
+        <h2 style="font-size: 1.5rem; display: inline-block; margin-right: 10px;">Category:</h2>
+        <select id="category" name="category" style="width: 175px;" class="select-box">
+            <option value="9">General Knowledge</option>
+            <option value="10">Entertainment: Books</option>
+            <option value="11">Entertainment: Film</option>
+            <option value="12">Entertainment: Music</option>
+            <option value="13">Entertainment: Musicals and Theatres</option>
+            <option value="14">Entertainment: Television</option>
+            <option value="15">Entertainment: Video Games</option>
+            <option value="16">Entertainment: Board Games</option>
+            <option value="29">Entertainment: Comics</option>
+            <option value="31">Entertainment: Japanese Anime & Manga</option>
+            <option value="32">Entertainment: Cartoon & Animations</option>
+            <option value="17">Science & Nature</option>
+            <option value="18">Science: Computers</option>
+            <option value="19">Science: Mathematics</option>
+            <option value="30">Science: Gadgets</option>
+            <option value="20">Mythology</option>
+            <option value="21">Sports</option>
+            <option value="22">Geography</option>
+            <option value="23">History</option>
+            <option value="24">Politics</option>
+            <option value="25">Art</option>
+            <option value="26">Celebrities</option>
+            <option value="27">Animals</option>
+            <option value="28">Vehicles</option>
+        </select><br><br>
+
+        <h2 style="font-size:1.5rem;display:inline-block;margin-right: 10px;">Difficulty:</h2>
+            <select id="difficulty" name="difficulty" class="select-box">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        
+        <br><br>
+        
+        <h2 style="font-size:1.5rem;display:inline-block;margin-right: 10px;">Type:</h2>
+        <select id="type" name="type" class="select-box">
+            <option value="multiple">Multiple Choice</option>
+            <option value="boolean">True/False</option>
+        </select>
+    
+        <br><br>
+    
+        <input type="submit" value="Generate Quiz">
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </div>
+</body>
+</html>
